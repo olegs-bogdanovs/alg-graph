@@ -1,16 +1,14 @@
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLEventListener;
-import com.jogamp.opengl.GLProfile;
+
+import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 
-import java.awt.*;
+import javax.swing.JFrame;
 
 public class BasicFrame implements GLEventListener {
 
     @Override
-    public void display(GLAutoDrawable arg0) {
-        // method body
+    public void display(GLAutoDrawable drawable) {
+
     }
 
     @Override
@@ -38,15 +36,16 @@ public class BasicFrame implements GLEventListener {
         final GLCanvas glcanvas = new GLCanvas(capabilities);
         BasicFrame b = new BasicFrame();
         glcanvas.addGLEventListener(b);
-        glcanvas.setSize(400, 400);
+        glcanvas.setSize(800, 800);
 
         //creating frame
-        final Frame frame = new Frame (" Basic Frame");
+        final JFrame frame = new JFrame (" Basic Frame");
 
-        //adding canvas to frame
-        frame.add(glcanvas);
-        frame.setSize( 640, 480 );
+        //adding canvas to it
+        frame.getContentPane().add(glcanvas);
+        frame.setSize(frame.getContentPane().getPreferredSize());
         frame.setVisible(true);
+
     }
 
 }

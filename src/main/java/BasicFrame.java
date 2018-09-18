@@ -1,6 +1,7 @@
 
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.glu.GLU;
 
 import javax.swing.JFrame;
 
@@ -8,7 +9,30 @@ public class BasicFrame implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
+        final GL2 gl = drawable.getGL().getGL2();
+        gl.glClearColor(1, 1, 1, 0);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
+
+        gl.glMatrixMode(GL2.GL_PROJECTION);
+        gl.glLoadIdentity();
+
+        GLU glu = new GLU();
+        glu.gluOrtho2D(-100, 100, -100,100);
+
+        gl.glBegin (GL2.GL_LINES);
+        gl.glColor3d(0,0,0);
+        gl.glVertex2f(0f, 100f);
+        gl.glVertex2f(0f, -100f);
+        gl.glVertex2f(-100f, 0f);
+        gl.glVertex2f(100f, 0f);
+        gl.glEnd();
+
+        gl.glColor3d(0, 0,1);
+        gl.glBegin(GL.GL_LINE_STRIP);
+            for (double x = -100; x < 100; x += 0.5)
+                gl.glVertex2d(x, Math.abs(1/4.0 * x + 3 * Math.cos(100 * x) * Math.sin(x)));
+        gl.glEnd();
     }
 
     @Override
@@ -19,6 +43,8 @@ public class BasicFrame implements GLEventListener {
     @Override
     public void init(GLAutoDrawable arg0) {
         // method body
+
+
     }
 
     @Override

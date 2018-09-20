@@ -2,7 +2,7 @@
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.LinkedList;
@@ -12,11 +12,13 @@ public class BasicFrame implements GLEventListener {
     private final static String FILE_NAME = "src/main/resources/coordinates.dat";
     private List<Point> coordinatesList;
     private List<Integer> codeList;
+    private Point currentPoint;
 
     public BasicFrame() {
         coordinatesList = new LinkedList<>();
         codeList = new LinkedList<>();
         readDataFromFile();
+        this.currentPoint = new Point(0, 0);
         System.out.println(coordinatesList);
         System.out.println(codeList);
 
@@ -82,6 +84,7 @@ public class BasicFrame implements GLEventListener {
 
         //creating frame
         final JFrame frame = new JFrame (" Basic Frame");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //adding canvas to it
         frame.getContentPane().add(glcanvas);

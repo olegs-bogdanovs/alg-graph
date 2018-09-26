@@ -55,7 +55,7 @@ public class BasicFrame implements GLEventListener {
         gl.glLoadIdentity();
 
         GLU glu = new GLU();
-        glu.gluOrtho2D(0, 100, 0, 100);
+        glu.gluOrtho2D(0, 150, 0, 100);
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();

@@ -1,6 +1,7 @@
 
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.glu.GLU;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -19,14 +20,21 @@ public class BasicFrame implements GLEventListener {
         codeList = new LinkedList<>();
         readDataFromFile();
         this.currentPoint = new Point(0, 0);
-        System.out.println(coordinatesList);
-        System.out.println(codeList);
-
     }
 
     @Override
     public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glClearColor(1, 1, 1, 0);
+        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
+        gl.glColor3f(0, 0, 0);
+        gl.glColor3d(1, 0, 0);
 
+        for (int i = 0; i < codeList.size(); i++){
+            if (codeList.get(i) < 0) moveTo(coordinatesList.get(codeList.get(i)*(-1) - 1));
+            else lineTo(coordinatesList.get(codeList.get(i) - 1), gl);
+        }
+        gl.glFlush();
     }
 
     @Override
@@ -40,8 +48,17 @@ public class BasicFrame implements GLEventListener {
     }
 
     @Override
-    public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3, int arg4) {
-        // method body
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glViewport(0, 0,width, height);
+        gl.glMatrixMode(GL2.GL_PROJECTION);
+        gl.glLoadIdentity();
+
+        GLU glu = new GLU();
+        glu.gluOrtho2D(0, 100, 0, 100);
+
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
     }
 
     private void readDataFromFile(){
@@ -58,7 +75,8 @@ public class BasicFrame implements GLEventListener {
             }
             int codeCount = Integer.parseInt(reader.readLine());
             for (int i = 0; i < codeCount; i++){
-                codeList.add(Integer.parseInt(reader.readLine()));
+                String line = reader.readLine();
+                codeList.add(Integer.parseInt(line));
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -68,6 +86,19 @@ public class BasicFrame implements GLEventListener {
 
     }
 
+    private void moveTo(Point p){
+        currentPoint.setX(p.getX());
+        currentPoint.setY(p.getY());
+    }
+
+    private void lineTo(Point p, GL2 gl){
+        gl.glBegin(GL2.GL_LINES);
+        gl.glVertex2i(currentPoint.getX(), currentPoint.getY());
+        gl.glVertex2i(p.getX(), p.getY());
+        gl.glEnd();
+        currentPoint.setX(p.getX());
+        currentPoint.setY(p.getY());
+    }
 
 
     public static void main(String[] args) {

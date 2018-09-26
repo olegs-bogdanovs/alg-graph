@@ -6,6 +6,7 @@ import com.jogamp.opengl.glu.GLU;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.DoubleBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,15 +26,26 @@ public class BasicFrame implements GLEventListener {
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
+
+
         gl.glClearColor(1, 1, 1, 0);
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
         gl.glColor3f(0, 0, 0);
         gl.glColor3d(1, 0, 0);
 
+        gl.glEnable(GL2.GL_CLIP_PLANE0);
+        DoubleBuffer doubleBuffer = DoubleBuffer.allocate(4);
+        doubleBuffer.put(new double[]{-2, 3, 0, 0});
+        doubleBuffer.flip();
+        gl.glClipPlane(GL2.GL_CLIP_PLANE0, doubleBuffer);
+
         for (int i = 0; i < codeList.size(); i++){
             if (codeList.get(i) < 0) moveTo(coordinatesList.get(codeList.get(i)*(-1) - 1));
             else lineTo(coordinatesList.get(codeList.get(i) - 1), gl);
         }
+
+        gl.glDisable(GL2.GL_CLIP_PLANE0);
+
         gl.glFlush();
     }
 
